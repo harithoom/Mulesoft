@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="basics" doc:id="c4069961-4a95-4b3d-841a-d1d62584aba4" >
+		<http:listener doc:name="Http Get" doc:id="042e26a1-2da5-42e6-b7c3-a8ee60f7166e" config-ref="HTTP_Listener_config" path="/basics" allowedMethods="GET" />
+		<http:request method="GET" doc:name="Request" doc:id="5dcb9417-22c6-486f-b66a-8863e8c22a8d" config-ref="HTTP_Request_configuration" path="/queryParams" target="requestresponse">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"k2" : "v2",
+	"k1" : "v1"
+}]]]></http:query-params>
+		</http:request>
+	</flow>
+	<flow name="http_connectorFlow" doc:id="3811cb94-ca55-47c9-aaa6-aa58b7680fc4" >
+	</flow>
+</mule>

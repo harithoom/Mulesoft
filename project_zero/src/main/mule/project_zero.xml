@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5156a0d9-6b86-4bda-8ccc-a8884d5d770e" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="bca4eb04-556c-4444-b12d-dd9cff197804">
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="project_zeroFlow" doc:id="3390a4f7-b260-4d11-9b33-913448f6c7b3" >
+		<http:listener doc:name="http listener for Hello World" doc:id="40d793e1-2447-4094-bfc5-68e103c43a30" config-ref="HTTP_Listener_config" path="/project_zero" allowedMethods="GET">
+			<http:response >
+				<http:body ><![CDATA[#[vars.outputresponse]]]></http:body>
+			</http:response>
+		</http:listener>
+		<logger level="INFO" doc:name="Log START" doc:id="ffbfe636-cabc-4f2f-9bcc-65f3c082a791" message="logger"/>
+		<set-payload value='#[flow.name]' doc:name="Set Payload" doc:id="3819c616-bf30-4978-844a-447748a29376" />
+		<http:request method="GET" doc:name="Request" doc:id="72e0d436-f725-43ef-aed5-d583710b9b2e" config-ref="HTTP_Request_configuration" path="/queryParams" target="outputresponse">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"K2" : "Value2",
+	"K1" : "Value1"
+}]]]></http:query-params>
+		</http:request>
+	</flow>
+	<flow name="project_zeroFlow1" doc:id="6f405e8f-b746-487e-b94c-9c02fe98f0bf" >
+		<http:listener doc:name="queryParams" doc:id="8c135145-ab2e-4e7e-84ce-fc920fecc91b" config-ref="HTTP_Listener_config" allowedMethods="GET" path="/queryParams"/>
+		<logger level="INFO" doc:name="Logger" doc:id="aa9eab45-f29d-4bf2-a64e-fd87cd06904f" message="#[flow.name]"/>
+	</flow>
+</mule>
